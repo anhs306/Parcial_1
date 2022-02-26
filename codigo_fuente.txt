@@ -1,0 +1,49 @@
+#define SER 11   //Serial input
+#define RCLK 12  //Register clock
+#define SRCLK 13 //Shift register clock
+  
+int array[8],i=0,entero=0;
+
+void setup()
+{
+  Serial.begin(9600);
+  for(short int i=2;i<10;i++)
+  	pinMode(i,INPUT);
+  pinMode(SER, OUTPUT);
+  pinMode(RCLK, OUTPUT);
+  pinMode(SRCLK, OUTPUT);
+}
+
+void loop()
+{
+  if(Serial.available()){  
+  	array[i] = Serial.read();
+    i++;
+    if(i>=8){
+      i=0;
+      entero=ToInt(array);
+      digitalWrite(RCLK,LOW);
+      shiftOut( SER, SRCLK, MSBFIRST, entero);
+      digitalWrite(RCLK,HIGH);
+      delay(500);
+      for(short int it=2;it<10;it++){
+    	Serial.print(digitalRead(it));
+      }
+      Serial.println();
+      delay(5000);
+    }
+  }
+}
+
+int ToInt(int array[]){
+  float entero=0;
+  for(short int i=7,I=0;i>=0;i--,I++){  
+    if(int(array[i])==1)
+      entero+=pow(2.0,I);
+  }
+  return entero;
+}
+
+
+
+
