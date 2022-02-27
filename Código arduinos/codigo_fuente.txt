@@ -1,0 +1,76 @@
+#define SER 11   //Serial input
+#define RCLK 12  //Register clock
+#define SRCLK 13 //Shift register clock
+int i=0,clave=0,dato=0,array[]={25,12,20,2,1,45,80,2,46,1,11,19,
+                               51,17,20,2,1,45,80,2,46,1,11,19,
+                               35,15,20,2,1,45,80,2,46,1,11,19,
+                               45,100,20,2,1,45,80,2,46,1,11,19,
+                               51,171,20,2,1,45,80,2,46,1,11,19,
+                               55,102,20,2,1,45,80,2,46,1,11,19,
+                               65,103,20,2,1,45,80,2,46,1,11,19,
+                               51,174,20,2,1,45,80,2,46,1,11,19,
+                               85,105,20,2,1,45,80,2,46,1,11,19,
+                               95,106,20,2,1,45,80,2,46,1,11,19,
+                               1,177,20,2,1,45,80,2,46,1,11,19,
+                               5,108,20,2,1,45,80,2,46,1,11,19,
+                               185,109,20,2,1,45,80,2,46,1,11,19,
+                               110,174,20,2,1,45,80,2,46,1,11,19,
+                               151,105,20,2,1,45,80,2,46,1,11,19,
+                               153,196,20,2,1,45,80,2,46,1,11,19,
+                               218,112,20,2,1,45,80,2,46,1,11,19,
+                               151,121,20,2,1,45,80,2,46,1,11,19,
+                               15,10,20,2,1,45,80,2,46,1,11,19};
+
+
+void setup()
+{
+  Serial.begin(9600);
+  for(short int i=2;i<10;i++)
+  	pinMode(i,INPUT);
+  pinMode(SER, OUTPUT);
+  pinMode(RCLK, OUTPUT);
+  pinMode(SRCLK, OUTPUT);
+}
+
+void loop()
+{
+  for(int i=0;i<sizeof(array)/2;i++){
+    if(array[i]==19){
+      clave++;
+      if(clave==19){
+        clave=0;
+      	for(int I=10;I<12;I++){
+          digitalWrite(RCLK,LOW);
+          shiftOut( SER, SRCLK, MSBFIRST, array[i-I]);
+          digitalWrite(RCLK,HIGH);
+          delay(500);
+          for(short int j=2;j<10;j++){
+              if(j%2==0){
+               if(digitalRead(j)==0)
+                 dato=1;
+               else
+                 dato=0;
+              }
+              else
+                dato = digitalRead(j);
+              Serial.write(dato);   
+            }
+          delay(1000);
+        } 
+      }         
+    }
+  } 
+}
+
+
+
+
+
+
+
+  return entero;
+}
+
+
+
+
