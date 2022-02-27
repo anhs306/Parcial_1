@@ -17,30 +17,52 @@ void setup()
 void loop()
 {
   if(Serial.available()){  
-  	array[i] = Serial.read();
+    array[i] = Serial.read();
+    if(i%2==0){
+      if(array[i]==0)
+        array[i]=1;
+      else
+        array[i]=0;
+    }
     i++;
-    if(i>=8){
+    if(i==8){
       i=0;
       entero=ToInt(array);
       digitalWrite(RCLK,LOW);
       shiftOut( SER, SRCLK, MSBFIRST, entero);
       digitalWrite(RCLK,HIGH);
       delay(500);
+      
       for(short int it=2;it<10;it++){
-    	Serial.print(digitalRead(it));
+        Serial.print(digitalRead(it));
       }
       Serial.println();
-      delay(5000);
+      delay(500);
     }
+    
+    
   }
 }
 
 int ToInt(int array[]){
-  float entero=0;
+  int entero=0;
   for(short int i=7,I=0;i>=0;i--,I++){  
     if(int(array[i])==1)
-      entero+=pow(2.0,I);
+      entero+=Pow(2,I);
   }
+  return entero;
+}
+
+int Pow(int numero,int exponente){
+  int numeroBase=numero;
+  if(exponente==0)return 1;
+  for(int i=1;i<exponente;i++)
+    numero*=numeroBase;
+  return numero;
+}
+
+
+
   return entero;
 }
 
