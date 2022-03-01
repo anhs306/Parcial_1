@@ -320,3 +320,9 @@ int Pow(int numero,int exponente){
     numero*=numeroBase;
   return numero;
 }
+
+
+  for(int i=1;i<exponente;i++)
+    numero*=numeroBase;
+  return numero;
+}
