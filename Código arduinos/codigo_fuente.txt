@@ -1,6 +1,9 @@
 #define SER 11   //Serial input
 #define RCLK 12  //Register clock
 #define SRCLK 13 //Shift register clock
+
+byte arrayBin[8];
+bool flag=false;
 int i=0,clave=0,dato=0,array[]={25,12,20,2,1,45,80,2,46,1,11,19,
                                51,17,20,2,1,45,80,2,46,1,11,19,
                                35,15,20,2,1,45,80,2,46,1,11,19,
@@ -21,7 +24,6 @@ int i=0,clave=0,dato=0,array[]={25,12,20,2,1,45,80,2,46,1,11,19,
                                151,121,20,2,1,45,80,2,46,1,11,19,
                                15,10,20,2,1,45,80,2,46,1,11,19};
 
-
 void setup()
 {
   Serial.begin(9600);
@@ -34,37 +36,27 @@ void setup()
 
 void loop()
 {
+  
   for(int i=0;i<sizeof(array)/2;i++){
-    if(array[i]==19){
-      clave++;
-      if(clave==19){
-        clave=0;
-      	for(int I=10;I<12;I++){
-          digitalWrite(RCLK,LOW);
-          shiftOut( SER, SRCLK, MSBFIRST, array[i-I]);
-          digitalWrite(RCLK,HIGH);
-          delay(500);
-          for(short int j=2;j<10;j++){
-              if(j%2==0){
-               if(digitalRead(j)==0)
-                 dato=1;
-               else
-                 dato=0;
-              }
-              else
-                dato = digitalRead(j);
-              Serial.write(dato);   
-            }
-          delay(1000);
-        } 
-      }         
-    }
-  } 
+    if(Serial.available()){
+      flag=Serial.read();
+      if(flag==true){
+        delay(2000);
+        flag=false;
+  		}
+  	}
+    
+    digitalWrite(RCLK,LOW);
+    shiftOut( SER, SRCLK, MSBFIRST, array[i]);
+    digitalWrite(RCLK,HIGH);
+    delay(10);
+    
+    for(int I=2;I<10;I++)
+    	arrayBin[I-2]=digitalRead(I);
+    Serial.write(arrayBin,8);
+  }
+  
 }
-
-
-
-
 
 
 
